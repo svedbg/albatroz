@@ -7,16 +7,9 @@ cache: npm
 
 stages:
   - name: Test
-  - name: Package
-    if: branch = master
 
 jobs:
   include:
     - stage: Test
       install: make dev
       script: "make lint && make test"
-    - stage: deploy
-      script: "mvn clean package rpm:rpm -Drpmversion=${sed -nE 's/^\s*"version": "(.*?)",$/\1/p' package.json} -Drpmrelease=${TRAVIS_BUILD_NUMBER} -Dgit_commit=${TRAVIS_COMMIT} -Dgit_source=${TRAVIS_BRANCH}"
-      skip_cleanup: true
-      on:
-        tags: true
